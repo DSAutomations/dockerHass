@@ -1,0 +1,27 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: home-assistant
+    restart: unless-stopped
+    image: homeassistant/raspberrypi3-homeassistant
+    volumes:
+      - /srv/docker/HomeAssistantConfig:/config
+      - /etc/localtime:/etc/localtime:ro
+      # - /srv/docker/hass_media:/media
+    network_mode: host
+    privileged: true
+    depends_on:
+     - mariadb
+  mariadb:
+    image: jsurf/rpi-mariadb:latest
+    ports:
+      - 3306:3306/tcp
+    volumes:
+      - /srv/docker/mariadb/config:/etc/mysql/conf.d
+      - /srv/docker/mariadb/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=super_database_password
+      - MYSQL_DATABASE=homeassistantdb
+      - MYSQL_USER=homeassistant
+      - MYSQL_PASSWORD=a_database_password
+    restart: always
