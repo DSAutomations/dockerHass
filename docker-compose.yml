@@ -12,6 +12,7 @@ services:
     privileged: true
     depends_on:
      - mariadb
+     - nodered
   mariadb:
     image: jsurf/rpi-mariadb:latest
     ports:
