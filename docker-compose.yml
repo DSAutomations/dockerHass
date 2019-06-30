@@ -8,11 +8,13 @@ services:
       - /srv/docker/HomeAssistantConfig:/config
       - /etc/localtime:/etc/localtime:ro
       # - /srv/docker/hass_media:/media
-    network_mode: host
+    ports:
+      - 8123:8123
     privileged: true
     depends_on:
      - mariadb
      - nodered
+     - influxdb
   mariadb:
     image: jsurf/rpi-mariadb:latest
     ports:
@@ -29,10 +31,27 @@ services:
   nodered:
     image: nodered/node-red-docker:rpi-v8
     ports:
-     - "1880:1880"
+     - 1880:1880
     volumes:
      - /srv/docker/nodered:/data
     user: "1000"
     restart: always
     environment:
       TZ: "America/New_York"
+  influxdb:
+    image: influxdb:latest
+    restart: always
+    ports:
+     - 8086:8086
+     - 8083:8083
+     - 2003:2003
+    volumes:
+     - /srv/docker/influxdb/data:/var/lib/influxdb
+  grafana:
+    image: grafana/grafana
+    ports:
+     - 3000:3000  
+    volumes:
+     - /srv/docker/grafana/data:/var/lib/grafana
+    restart: always
+
