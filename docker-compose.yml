@@ -48,7 +48,7 @@ services:
     volumes:
      - /srv/docker/influxdb/data:/var/lib/influxdb
   grafana:
-    image: grafana/grafana
+    image: fg2it/grafana-armhf
     ports:
      - 3000:3000  
     volumes:
