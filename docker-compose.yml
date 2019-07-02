@@ -13,7 +13,6 @@ services:
     privileged: true
     depends_on:
      - mariadb
-     - nodered
      - influxdb
   mariadb:
     image: jsurf/rpi-mariadb:latest
@@ -38,6 +37,8 @@ services:
     restart: always
     environment:
       TZ: "America/New_York"
+    depends_on:
+     - homeassistant
   influxdb:
     image: influxdb:latest
     restart: always
@@ -48,10 +49,11 @@ services:
     volumes:
      - /srv/docker/influxdb/data:/var/lib/influxdb
   grafana:
-    image: fg2it/grafana-armhf
+    image: fg2it/grafana-armhf:v5.0.4
     ports:
      - 3000:3000  
     volumes:
      - /srv/docker/grafana/data:/var/lib/grafana
     restart: always
-
+    depends_on:
+     - influxdb
