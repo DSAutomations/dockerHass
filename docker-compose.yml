@@ -57,3 +57,11 @@ services:
     restart: always
     depends_on:
      - influxdb
+  portainer:
+    image: portainer/portainer
+    restart: always
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+     - /srv/docker/portainer/data:/data
+    ports:
+     - 9000:9000
